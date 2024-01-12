@@ -30,7 +30,7 @@ class FamilyStructure:
             if member['id'] == id:
                 del self._members[i]
                 return True, 200
-            return False, 404
+        return False, 404
         #self._members = [member for member in self._members if member['id'] != id]
         #pass
 
@@ -38,7 +38,7 @@ class FamilyStructure:
         # fill this method and update the return
         for member in self._members:
             if member ['id'] == id:
-                return member
+                return member, 200
         return None, 404
 
         #pass

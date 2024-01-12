@@ -39,6 +39,7 @@ jackson_family.add_member({
 })
 
 
+
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
@@ -54,23 +55,30 @@ def sitemap():
 def get_members():
     return jsonify(jackson_family.get_all_members()), 200
 
-@app.route('/memeber/<int:member_id>', methods=['GET'])
-def get_member_by_id(member_id):
-    member,status_code = jackson_family.get_member(member_id)
+    
+@app.route('/member/<int:id>', methods=['GET'])
+def get_member_by_id(id):
+    member, status_code = jackson_family.get_member(id)
     if member is not None:
-        return jsonify(member), 200
+        return jsonify(member), status_code
     else:
-        return jsonify({'error': "Member not found"}), status_code
+        return jsonify({'error': "Member not found"}), status_code, 400
 
 @app.route('/member/', methods= ['POST'])
 def add_member():
     member = request.json
     jackson_family.add_member(member)
-    return jsonify({}), 200
+    
+    return jsonify({
+        "first_name": "",
+        "age": "",
+        "lucky_numbers": [],
+        "id": "" 
+    }), 200
 
-@app.route('/member/<int:member_id>', methods=['DELETE'])
-def delete_member(member_id):
-    success, status_code = jackson_family.delete_member(member_id)
+@app.route('/member/<int:id>', methods=['DELETE'])
+def delete_member(id):
+    success, status_code = jackson_family.delete_member(id)
     if success:
         return jsonify({'done': True}), 200
     else:
